@@ -1,0 +1,82 @@
+version: '3.8'
+
+# Healthcare Management System - Consolidated Architecture
+services:
+  # --- 1. Global Database Service ---
+  # Hosts both sso_db and core_db in one container
+  postgres-global:
+    # CHANGED: Use 'build' instead of 'image' so it uses your Dockerfile
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    container_name: healthcare-postgres-global
+    environment:
+      POSTGRES_DB: maintenance_db
+      POSTGRES_USER: admin_user
+      POSTGRES_PASSWORD: admin_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-global-data:/var/lib/postgresql/data
+      # REMOVED: The script mount line is no longer needed
+      # because your Dockerfile now copies the script automatically.
+    networks:
+      - healthcare-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin_user -d maintenance_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # --- 2. SSO Service ---
+  sso:
+    build:
+      context: ./Core_App
+      dockerfile: sso/Dockerfile
+    container_name: healthcare-sso
+    environment:
+      # Connects to 'postgres-global' host, using 'sso_db'
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-global:5432/sso_db
+      SPRING_DATASOURCE_USERNAME: sso_user
+      SPRING_DATASOURCE_PASSWORD: sso_password
+      JWT_SECRET: healthcare-super-secret-key-change-in-production-256-bits-minimum
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres-global:
+        condition: service_healthy
+    networks:
+      - healthcare-network
+    restart: unless-stopped
+
+  # --- 3. Core Service ---
+  core:
+    build:
+      context: ./Core_App
+      dockerfile: core/Dockerfile
+    container_name: healthcare-core
+    environment:
+      # Connects to 'postgres-global' host, using 'core_db'
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-global:5432/core_db
+      SPRING_DATASOURCE_USERNAME: core_user
+      SPRING_DATASOURCE_PASSWORD: core_password
+      SSO_SERVICE_URL: http://sso:8081/api/sso
+      JWT_SECRET: healthcare-super-secret-key-change-in-production-256-bits-minimum
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres-global:
+        condition: service_healthy
+      sso:
+        condition: service_started
+    networks:
+      - healthcare-network
+    restart: unless-stopped
+
+networks:
+  healthcare-network:
+    driver: bridge
+
+volumes:
+  postgres-global-data:

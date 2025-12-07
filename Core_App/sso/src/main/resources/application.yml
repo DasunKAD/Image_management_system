@@ -1,0 +1,92 @@
+# ============================================
+# SSO Service Configuration
+# Authentication and Authorization Service
+# ============================================
+
+server:
+  port: 8081
+  servlet:
+    context-path: /api/sso
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: sso-service
+    
+  # Database Configuration - SSO Database
+  datasource:
+    url: jdbc:postgresql://postgres-sso:5432/sso_db
+    username: sso_user
+    password: sso_password
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+        
+  # Jackson Configuration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: UTC
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:healthcare-super-secret-key-must-be-at-least-256-bits-long-change-in-production}
+  expiration: 86400000  # 24 hours in milliseconds
+  refresh-expiration: 604800000  # 7 days
+  issuer: healthcare-sso-service
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.healthcare.sso: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Management & Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# Application-specific properties
+application:
+  security:
+    max-login-attempts: 5
+    account-lock-duration: 900000  # 15 minutes
+    password-expiry-days: 90
+  cors:
+    allowed-origins: http://localhost:3000,http://localhost:3001
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
