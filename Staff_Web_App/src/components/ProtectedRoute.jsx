@@ -22,30 +22,34 @@ const ProtectedRoute = ({ children, roles = [] }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (roles.length > 0 && !roles.includes(user.role)) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column',
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        gap: '1rem',
-        padding: '2rem',
-        textAlign: 'center'
-      }}>
-        <h2>Access Denied</h2>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          You don't have permission to access this page.
-        </p>
-        <button 
-          className="btn btn-primary"
-          onClick={() => window.history.back()}
-        >
-          Go Back
-        </button>
-      </div>
-    );
+  // 🔑 Role protection fix here
+  if (roles.length > 0) {
+    const hasPermission = roles.some(role => user.roles?.includes(role));
+    if (!hasPermission) {
+      return (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          gap: '1rem',
+          padding: '2rem',
+          textAlign: 'center'
+        }}>
+          <h2>Access Denied</h2>
+          <p style={{ color: 'var(--text-secondary)' }}>
+            You don't have permission to access this page.
+          </p>
+          <button 
+            className="btn btn-primary"
+            onClick={() => window.location.href = '/dashboard'}
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      );
+    }
   }
 
   return children;

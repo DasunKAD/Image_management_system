@@ -31,7 +31,7 @@ function App() {
             <Route
               path="/patients"
               element={
-                <ProtectedRoute roles={['admin', 'management', 'doctor']}>
+                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_DOCTOR']}>
                   <PatientManagement />
                 </ProtectedRoute>
               }
@@ -39,7 +39,7 @@ function App() {
             <Route
               path="/staff"
               element={
-                <ProtectedRoute roles={['admin', 'management']}>
+                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_STAFF']}>
                   <StaffManagement />
                 </ProtectedRoute>
               }
@@ -47,7 +47,7 @@ function App() {
             <Route
               path="/appointments"
               element={
-                <ProtectedRoute roles={['admin', 'management', 'doctor']}>
+                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_DOCTOR']}>
                   <AppointmentScheduling />
                 </ProtectedRoute>
               }
@@ -55,7 +55,7 @@ function App() {
             <Route
               path="/images"
               element={
-                <ProtectedRoute roles={['radiologist', 'doctor']}>
+                <ProtectedRoute roles={['ROLE_RADIOLOGIST', 'ROLE_DOCTOR']}>
                   <ImageUpload />
                 </ProtectedRoute>
               }
@@ -63,7 +63,7 @@ function App() {
             <Route
               path="/diagnosis"
               element={
-                <ProtectedRoute roles={['doctor']}>
+                <ProtectedRoute roles={['ROLE_DOCTOR']}>
                   <DiagnosisReports />
                 </ProtectedRoute>
               }
@@ -71,7 +71,7 @@ function App() {
             <Route
               path="/billing"
               element={
-                <ProtectedRoute roles={['finance', 'admin']}>
+                <ProtectedRoute roles={['ROLE_FINANCE', 'ROLE_ADMIN']}>
                   <BillingInvoice />
                 </ProtectedRoute>
               }

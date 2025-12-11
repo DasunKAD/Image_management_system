@@ -15,7 +15,7 @@ const Login = () => {
     { email: 'doctor@hospital.com', password: 'doctor123', role: 'Doctor' },
     { email: 'radiologist@hospital.com', password: 'radio123', role: 'Radiologist' },
     { email: 'finance@hospital.com', password: 'finance123', role: 'Finance' },
-    { email: 'management@hospital.com', password: 'manage123', role: 'Management' },
+    // { email: 'management@hospital.com', password: 'manage123', role: 'Management' },
   ];
 
   const handleSubmit = async (e) => {
@@ -292,8 +292,7 @@ const Login = () => {
                 color: 'var(--primary-green-dark)',
                 lineHeight: 1.5,
               }}>
-                <strong>Note:</strong> This is a demo application. All data is simulated and 
-                will reset on page refresh. API calls will fail gracefully and use mock data.
+                <strong>Note:</strong> This is a demo application. All login data is predefined here for easy access.
               </p>
             </div>
           </div>

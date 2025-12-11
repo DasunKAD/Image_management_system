@@ -37,37 +37,37 @@ const Layout = ({ children }) => {
       path: '/patients', 
       icon: Users, 
       label: 'Patients', 
-      roles: ['admin', 'management', 'doctor'] 
+      roles: ['ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_DOCTOR']
     },
     { 
       path: '/staff', 
       icon: UserCog, 
       label: 'Staff Management', 
-      roles: ['admin', 'management'] 
+      roles: ['ROLE_ADMIN', 'ROLE_STAFF']
     },
     { 
       path: '/appointments', 
       icon: Calendar, 
       label: 'Appointments', 
-      roles: ['admin', 'management', 'doctor'] 
+      roles: ['ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_DOCTOR']
     },
     { 
       path: '/images', 
       icon: Image, 
       label: 'Medical Images', 
-      roles: ['radiologist', 'doctor'] 
+      roles: ['ROLE_RADIOLOGIST', 'ROLE_DOCTOR']
     },
     { 
       path: '/diagnosis', 
       icon: FileText, 
       label: 'Diagnosis', 
-      roles: ['doctor'] 
+      roles: ['ROLE_DOCTOR'] 
     },
     { 
       path: '/billing', 
       icon: DollarSign, 
       label: 'Billing', 
-      roles: ['finance', 'admin'] 
+      roles: ['ROLE_FINANCE', 'ROLE_ADMIN'] 
     },
   ];
 

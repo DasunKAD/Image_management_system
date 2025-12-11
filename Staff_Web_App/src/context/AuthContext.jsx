@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import authService from '../services/authService.js';
 
 const AuthContext = createContext(null);
 
@@ -25,49 +26,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      // In production, this would be an API call
-      // For demo, using mock authentication
-      const mockUsers = {
-        'admin@hospital.com': { 
-          id: 1, 
-          name: 'Dr. Sarah Johnson', 
-          email: 'admin@hospital.com', 
-          role: 'admin',
-          password: 'admin123'
-        },
-        'doctor@hospital.com': { 
-          id: 2, 
-          name: 'Dr. Michael Chen', 
-          email: 'doctor@hospital.com', 
-          role: 'doctor',
-          password: 'doctor123'
-        },
-        'radiologist@hospital.com': { 
-          id: 3, 
-          name: 'Dr. Emily Davis', 
-          email: 'radiologist@hospital.com', 
-          role: 'radiologist',
-          password: 'radio123'
-        },
-        'finance@hospital.com': { 
-          id: 4, 
-          name: 'Robert Martinez', 
-          email: 'finance@hospital.com', 
-          role: 'finance',
-          password: 'finance123'
-        },
-        'management@hospital.com': { 
-          id: 5, 
-          name: 'Jennifer Lee', 
-          email: 'management@hospital.com', 
-          role: 'management',
-          password: 'manage123'
-        },
-      };
 
-      const foundUser = mockUsers[credentials.email];
+      // const foundUser = mockUsers[credentials.email];
+      const foundUser = await authService.login(credentials.email, credentials.password);
+      localStorage.setItem('accessToken', foundUser.token);
       
-      if (!foundUser || foundUser.password !== credentials.password) {
+      if (!foundUser || !foundUser.token) {
         throw new Error('Invalid credentials');
       }
 
@@ -84,12 +48,14 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('accessToken');
   };
 
   const hasRole = (allowedRoles) => {
-    if (!user) return false;
-    if (!allowedRoles || allowedRoles.length === 0) return true;
-    return allowedRoles.includes(user.role);
+  if (!user?.roles) return false;
+  if (!allowedRoles || allowedRoles.length === 0) return true;
+
+  return allowedRoles.some(role => user.roles.includes(role));
   };
 
   const value = {

@@ -15,9 +15,9 @@ const PatientManagement = () => {
     dateOfBirth: '',
     gender: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
     address: '',
-    bloodType: '',
+    bloodGroup: '',
     allergies: '',
     medicalHistory: '',
   });
@@ -25,6 +25,13 @@ const PatientManagement = () => {
   useEffect(() => {
     loadPatients();
   }, []);
+
+    useEffect(() => {
+    if (formData.email && !editingPatient) {
+      setFormData(prev => ({ ...prev, username: formData.email }));
+    }
+  }, [formData.email, editingPatient]);
+
 
   const loadPatients = async () => {
     try {
@@ -39,6 +46,10 @@ const PatientManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert('Password and Confirm Password do not match!');
+      return;
+    }
     try {
       if (editingPatient) {
         await apiService.patients.update(editingPatient.id, formData);
@@ -78,11 +89,14 @@ const PatientManagement = () => {
       dateOfBirth: '',
       gender: '',
       email: '',
-      phone: '',
+      phoneNumber: '',
       address: '',
-      bloodType: '',
+      bloodGroup: '',
       allergies: '',
       medicalHistory: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
     });
   };
 
@@ -159,7 +173,7 @@ const PatientManagement = () => {
                   <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600 }}>DOB</th>
                   <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600 }}>Gender</th>
                   <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600 }}>Contact</th>
-                  <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600 }}>Blood Type</th>
+                  <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600 }}>Blood Group</th>
                   <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600 }}>Actions</th>
                 </tr>
               </thead>
@@ -174,10 +188,10 @@ const PatientManagement = () => {
                     <td style={{ padding: '1rem' }}>{patient.gender}</td>
                     <td style={{ padding: '1rem', fontSize: '0.875rem' }}>
                       <div>{patient.email}</div>
-                      <div style={{ color: 'var(--text-secondary)' }}>{patient.phone}</div>
+                      <div style={{ color: 'var(--text-secondary)' }}>{patient.phoneNumber}</div>
                     </td>
                     <td style={{ padding: '1rem' }}>
-                      <span className="badge badge-info">{patient.bloodType}</span>
+                      <span className="badge badge-info">{patient.bloodGroup}</span>
                     </td>
                     <td style={{ padding: '1rem' }}>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -319,8 +333,8 @@ const PatientManagement = () => {
                     <input
                       type="tel"
                       className="input"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      value={formData.phoneNumber}
+                      onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                       required
                     />
                   </div>
@@ -337,12 +351,12 @@ const PatientManagement = () => {
                   </div>
                   <div>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>
-                      Blood Type
+                      Blood Group
                     </label>
                     <select
                       className="input"
-                      value={formData.bloodType}
-                      onChange={(e) => setFormData({ ...formData, bloodType: e.target.value })}
+                      value={formData.bloodGroup}
+                      onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
                     >
                       <option value="">Select...</option>
                       <option value="A+">A+</option>
@@ -379,6 +393,55 @@ const PatientManagement = () => {
                       placeholder="Brief medical history..."
                     />
                   </div>
+
+                  {/* Security Section */}
+                  <div style={{ gridColumn: '1 / -1', marginTop: '1.5rem' }}>
+                    <h3 style={{ marginBottom: '0.75rem' }}>Security Details</h3>
+
+                    {/* Username */}
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>
+                      Username *
+                    </label>
+                    <input
+                      type="text"
+                      className="input"
+                      value={formData.username || ''}
+                      onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                      required
+                    />
+
+                    {/* Password */}
+                    <label style={{ display: 'block', marginTop: '1rem', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>
+                      Password *
+                    </label>
+                    <input
+                      type="password"
+                      className="input"
+                      value={formData.password || ''}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      required
+                    />
+
+                    {/* Confirm Password */}
+                    <label style={{ display: 'block', marginTop: '1rem', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 500 }}>
+                      Confirm Password *
+                    </label>
+                    <input
+                      type="password"
+                      className="input"
+                      value={formData.confirmPassword || ''}
+                      onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                      required
+                    />
+
+                    {/* Password mismatch message */}
+                    {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                      <p style={{ color: 'red', fontSize: '0.85rem', marginTop: '0.25rem' }}>
+                        ⚠ Passwords do not match
+                      </p>
+                    )}
+                  </div>
+
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>

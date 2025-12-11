@@ -145,12 +145,12 @@ const MOCK_DATA = {
 };
 
 // API Base URL (configure for production)
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-
+const API_CORE_URL = import.meta.env.VITE_CORE_BASE_URL || '';
 // Create axios instance
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_CORE_URL,
   headers: {
+    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
     'Content-Type': 'application/json',
   },
 });
@@ -172,8 +172,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      // localStorage.removeItem('user');
+      // window.location.href = '/login';
     }
     return Promise.reject(error);
   }
@@ -199,7 +199,7 @@ const apiService = {
       try {
         // Try real API first
         const response = await api.get('/patients');
-        return response.data;
+        return response;
       } catch (error) {
         console.warn('API unavailable, using mock data:', error.message);
         return await mockApiCall(MOCK_DATA.patients);
@@ -219,7 +219,7 @@ const apiService = {
     
     create: async (patientData) => {
       try {
-        const response = await api.post('/patients', patientData);
+        const response = await api.post('/patients/register', patientData);
         return response.data;
       } catch (error) {
         console.warn('API unavailable, simulating create');
@@ -263,7 +263,7 @@ const apiService = {
     
     search: async (query) => {
       try {
-        const response = await api.get(`/patients/search?q=${query}`);
+        const response = await api.get(`/patients/search?term=${query}`);
         return response.data;
       } catch (error) {
         console.warn('API unavailable, using mock search');
@@ -386,6 +386,17 @@ const apiService = {
           MOCK_DATA.appointments[index].status = 'Cancelled';
         }
         return await mockApiCall(MOCK_DATA.appointments[index]);
+      }
+    },
+  },
+  
+  serviceCatalogs: {
+    getAll: async () => {
+      try {
+        const response = await api.get('/data/service-catalogs');
+        return response;
+      } catch (error) {
+        console.warn('API unavailable, using mock service catalog data');
       }
     },
   },
@@ -558,7 +569,15 @@ const apiService = {
   dashboard: {
     getStats: async () => {
       try {
-        const response = await api.get('/dashboard/stats');
+       return await mockApiCall({
+          totalPatients: MOCK_DATA.patients.length,
+          totalStaff: MOCK_DATA.staff.length,
+          totalAppointments: MOCK_DATA.appointments.length,
+          pendingAppointments: MOCK_DATA.appointments.filter(a => a.status === 'Scheduled').length,
+          completedAppointments: MOCK_DATA.appointments.filter(a => a.status === 'Completed').length,
+          totalRevenue: MOCK_DATA.invoices.reduce((sum, inv) => sum + inv.total, 0),
+          pendingPayments: MOCK_DATA.invoices.filter(inv => inv.status === 'Pending').length,
+        });
         return response.data;
       } catch (error) {
         console.warn('API unavailable, using mock stats');
