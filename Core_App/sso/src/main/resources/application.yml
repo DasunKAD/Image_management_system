@@ -17,7 +17,7 @@ spring:
     
   # Database Configuration - SSO Database
   datasource:
-    url: jdbc:postgresql://postgres-sso:5432/sso_db
+    url: jdbc:postgresql://localhost:5432/sso_db
     username: sso_user
     password: sso_password
     driver-class-name: org.postgresql.Driver
@@ -31,7 +31,7 @@ spring:
   # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -42,7 +42,7 @@ spring:
           batch_size: 20
         order_inserts: true
         order_updates: true
-        
+        default_schema: public
   # Jackson Configuration
   jackson:
     serialization:
@@ -51,7 +51,7 @@ spring:
 
 # JWT Configuration
 jwt:
-  secret: ${JWT_SECRET:healthcare-super-secret-key-must-be-at-least-256-bits-long-change-in-production}
+  secret: 25a8222ebdd4324f0229edebd6ad1308eca46d71844973a18749d14d3b8230c7
   expiration: 86400000  # 24 hours in milliseconds
   refresh-expiration: 604800000  # 7 days
   issuer: healthcare-sso-service

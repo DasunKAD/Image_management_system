@@ -41,7 +41,9 @@ public class Role extends BaseEntity {
         ROLE_DOCTOR("Doctor Role - Access to medical records and patient data"),
         ROLE_ADMIN("Administrator Role - Full system access"),
         ROLE_FINANCE("Finance Role - Access to billing and financial data"),
-        ROLE_RADIOLOGIST("Radiologist Role - Access to imaging and radiology data");
+        ROLE_RADIOLOGIST("Radiologist Role - Access to imaging and radiology data"),
+        ROLE_STAFF("Staff Role - Access to medical records, patient data"),
+        ROLE_TECHNICIAN("Technician Role - Access to the image data and upload images");
 
         private final String description;
 

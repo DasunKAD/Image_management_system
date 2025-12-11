@@ -31,15 +31,7 @@ public class StaffService {
         );
 
         // Create staff record in Core DB
-        Staff staff = Staff.builder()
-                .userId(ssoUser.getId())
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .phoneNumber(request.getPhoneNumber())
-                .address(request.getAddress())
-                .department(request.getDepartment())
-                .position(request.getPosition())
-                .build();
+        Staff staff = new Staff();
 
         return staffRepository.save(staff);
     }

@@ -66,7 +66,7 @@ public abstract class BaseEntity implements Serializable {
      * Soft delete flag for maintaining data integrity
      * Demonstrates business logic in entity layer
      */
-    @Column(name = "deleted", nullable = false)
+    @Column(name = "deleted", nullable = true)
     private Boolean deleted = false;
 
     /**

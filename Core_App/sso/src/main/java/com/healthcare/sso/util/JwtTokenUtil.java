@@ -76,6 +76,7 @@ public class JwtTokenUtil {
         
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
+        claims.put("email", user.getEmail());
         claims.put("userId", user.getId());
         claims.put("roles", user.getRoleNames());
         claims.put("groups", user.getGroupNames());

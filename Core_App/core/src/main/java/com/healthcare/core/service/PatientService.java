@@ -4,6 +4,7 @@ import com.healthcare.common.dto.PatientRegistrationRequest;
 import com.healthcare.common.dto.UserResponse;
 import com.healthcare.common.entity.Patient;
 import com.healthcare.core.repository.PatientRepository;
+import com.healthcare.core.util.UniqueCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final SsoClient ssoClient;
+    private final UniqueCodeGenerator codeGenerator;
 
     @Transactional
     public Patient registerPatient(PatientRegistrationRequest request) {
@@ -40,9 +43,12 @@ public class PatientService {
                 .phoneNumber(request.getPhoneNumber())
                 .address(request.getAddress())
                 .bloodGroup(request.getBloodGroup())
+                .deleted(false)
                 .medicalHistory(request.getMedicalHistory())
                 .allergies(request.getAllergies())
                 .build();
+
+        patient.setPatientCode("P"+ codeGenerator.generateUniqueCode());
 
         return patientRepository.save(patient);
     }
@@ -50,6 +56,11 @@ public class PatientService {
     @Transactional(readOnly = true)
     public List<Patient> getAllPatients() {
         return patientRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Patient> searchPatients(String term) {
+        return patientRepository.searchPatients(term);
     }
 
     @Transactional(readOnly = true)

@@ -1,5 +1,6 @@
 package com.healthcare.core.controller;
 
+import com.healthcare.common.dto.ApiResponse;
 import com.healthcare.common.dto.PatientRegistrationRequest;
 import com.healthcare.common.entity.Patient;
 import com.healthcare.core.service.PatientService;
@@ -30,6 +31,13 @@ public class PatientController {
     public ResponseEntity<List<Patient>> getAllPatients() {
         return ResponseEntity.ok(patientService.getAllPatients());
     }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF', 'DOCTOR', 'RADIOLOGIST')")
+    public ResponseEntity<List<Patient>> searchPatients(@RequestParam("term") String term) {
+        return ResponseEntity.ok(patientService.searchPatients(term));
+    }
+
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RADIOLOGIST')")

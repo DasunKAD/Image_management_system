@@ -1,0 +1,324 @@
+# Healthcare Management System - .gitignore
+
+##########################
+# Java & Maven
+##########################
+
+# Compiled class files
+*.class
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+*/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+##########################
+# IDE Files
+##########################
+
+# IntelliJ IDEA
+.idea/
+*/.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.idea_modules/
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+##########################
+# Spring Boot
+##########################
+
+# Spring Boot build info
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Spring Boot DevTools
+.spring-boot-devtools.properties
+
+##########################
+# Logs
+##########################
+
+# Log files
+*.log
+logs/
+*.log.*
+/log/
+
+# Application logs
+application.log
+application-*.log
+spring.log
+
+##########################
+# OS Files
+##########################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+##########################
+# Docker & Docker Compose
+##########################
+
+# Docker volumes
+docker-compose.override.yml
+.docker/
+
+# Persistent data
+data/
+pgdata/
+postgres-data/
+
+##########################
+# Security & Credentials
+##########################
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Application properties with secrets
+application-secret.properties
+application-secret.yml
+application-local.properties
+application-local.yml
+
+# Certificates and keys
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+# JWT secrets
+jwt-secret.txt
+secrets/
+
+##########################
+# Database
+##########################
+
+# H2 Database
+*.db
+*.h2.db
+*.trace.db
+
+# SQLite
+*.sqlite
+*.sqlite3
+
+# Database backups
+*.sql.backup
+*.dump
+backup/
+
+##########################
+# Testing
+##########################
+
+# Test coverage
+coverage/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# JUnit
+test-output/
+*.exec
+
+##########################
+# Temporary Files
+##########################
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+
+# Cache
+.cache/
+*.cache
+
+##########################
+# Build Tools
+##########################
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# NPM (if you have frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+##########################
+# Application Specific
+##########################
+
+# Uploaded files
+uploads/
+upload-dir/
+temp-uploads/
+
+# Generated files
+generated/
+generated-sources/
+generated-test-sources/
+
+# Reports
+reports/
+*.rpt
+
+##########################
+# Documentation
+##########################
+
+# Generated documentation
+/docs/build/
+/docs/.build/
+site/
+
+##########################
+# Miscellaneous
+##########################
+
+# Ignore local configuration
+local.properties
+local-config.yml
+
+# Ignore system files
+.metadata
+.recommenders
+
+# Ignore compiled Python files (if using Python scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore Ruby files (if using Ruby scripts)
+*.gem
+*.rbc
+
+##########################
+# Keep These Files
+##########################
+
+# Keep empty directories with .gitkeep
+!.gitkeep
+
+# Keep wrapper jar
+!.mvn/wrapper/maven-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Keep example configuration files
+!application.yml.example
+!application.properties.example
+!.env.example
+
+##########################
+# Project Specific
+##########################
+
+# Ignore downloaded dependencies
+/lib/
+/libs/
+
+# Ignore IDE workspace files
+*.sublime-project
+*.sublime-workspace
+
+# Ignore backup files from editors
+*~
+\#*\#
+.#*
+
+##########################
+# Web Projects
+##########################
+
+# Deployment
+.vercel
+.netlify
+
+# Misc
+*.tgz
+*.tar.gz
+**/node_modules/
+
+
+# END OF .gitignore

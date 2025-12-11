@@ -7,7 +7,7 @@ spring:
   application:
     name: core-service
   datasource:
-    url: jdbc:postgresql://postgres-core:5432/core_db
+    url: jdbc:postgresql://localhost:5432/core_db
     username: core_user
     password: core_password
     driver-class-name: org.postgresql.Driver
@@ -22,10 +22,10 @@ spring:
 
 sso:
   service:
-    url: http://sso:8081/api/sso
+    url: http://localhost:8081/api/sso
 
 jwt:
-  secret: ${JWT_SECRET:healthcare-super-secret-key-change-in-production-min-256-bits}
+  secret: 25a8222ebdd4324f0229edebd6ad1308eca46d71844973a18749d14d3b8230c7
 
 logging:
   level:
