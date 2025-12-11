@@ -113,28 +113,48 @@ CREATE INDEX IF NOT EXISTS idx_uug_group ON user_user_groups(user_group_id);
 
 -- =====================================================
 -- INITIAL DATA - ROLES
--- Purpose: Create system roles matching Role.RoleName enum
+-- Purpose: Create system roles with all required fields
 -- =====================================================
-INSERT INTO roles (id, name, description, active) VALUES
-(1, 'ROLE_PATIENT', 'Patient Role - Access to patient portal and personal medical records', true),
-(2, 'ROLE_DOCTOR', 'Doctor Role - Access to medical records, patient data, and clinical tools', true),
-(3, 'ROLE_ADMIN', 'Administrator Role - Full system access and user management', true),
-(4, 'ROLE_FINANCE', 'Finance Role - Access to billing, payments, and financial reports', true),
-(5, 'ROLE_RADIOLOGIST', 'Radiologist Role - Access to imaging data and radiology systems', true)
+INSERT INTO roles (id, name, description, active, deleted, created_at, updated_at) VALUES
+(1, 'ROLE_PATIENT', 'Patient Role - Access to patient portal and personal medical records', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'ROLE_DOCTOR', 'Doctor Role - Access to medical records, patient data, and clinical tools', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'ROLE_ADMIN', 'Administrator Role - Full system access and user management', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 'ROLE_FINANCE', 'Finance Role - Access to billing, payments, and financial reports', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 'ROLE_RADIOLOGIST', 'Radiologist Role - Access to imaging data and radiology systems', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 'ROLE_STAFF', 'Staff Role - Access to medical records, patient data', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 'ROLE_TECHNICIAN', 'Technician Role - Access to the image data and upload images', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (name) DO NOTHING;
 
 -- =====================================================
 -- INITIAL DATA - USER GROUPS
--- Purpose: Create organizational groups
+-- Purpose: Create organizational groups with all required fields
 -- =====================================================
-INSERT INTO user_groups (id, name, description, active) VALUES
-(1, 'PATIENTS', 'Group for all patient users', true),
-(2, 'DOCTORS', 'Group for all doctor users', true),
-(3, 'ADMINS', 'Group for all administrator users', true),
-(4, 'FINANCE', 'Group for all finance staff users', true),
-(5, 'RADIOLOGISTS', 'Group for all radiologist users', true),
-(6, 'STAFF', 'Group for general staff members', true)
+INSERT INTO user_groups (id, name, description, active, deleted, created_at, updated_at) VALUES
+(1, 'PATIENTS', 'Group for all patient users', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'DOCTORS', 'Group for all doctor users', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'ADMINS', 'Group for all administrator users', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 'FINANCE', 'Group for all finance staff users', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 'RADIOLOGISTS', 'Group for all radiologist users', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 'STAFFS', 'Group for general staff members', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 'TECHNICIANS', 'Group for Technician members', true, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ON CONFLICT (name) DO NOTHING;
+
+-- =====================================================
+-- NOTE: user_group_roles table
+-- =====================================================
+-- The user_group_roles table is not defined in your schema.
+-- You may need to create it first, or you might be referring to a different table.
+-- If you need this table, here's a suggested definition:
+
+CREATE TABLE IF NOT EXISTS public.user_group_roles (
+    user_group_id int8 NOT NULL,
+    role_id int8 NOT NULL,
+    CONSTRAINT user_group_roles_pkey PRIMARY KEY (user_group_id, role_id),
+    CONSTRAINT fk_ugr_group FOREIGN KEY (user_group_id) REFERENCES public.user_groups(id),
+    CONSTRAINT fk_ugr_role FOREIGN KEY (role_id) REFERENCES public.roles(id)
+);
+CREATE INDEX IF NOT EXISTS idx_ugr_group ON public.user_group_roles USING btree (user_group_id);
+CREATE INDEX IF NOT EXISTS idx_ugr_role ON public.user_group_roles USING btree (role_id);
 
 -- =====================================================
 -- INITIAL DATA - GROUP ROLE ASSIGNMENTS
@@ -145,57 +165,16 @@ INSERT INTO user_group_roles (user_group_id, role_id) VALUES
 (2, 2), -- DOCTORS group has ROLE_DOCTOR
 (3, 3), -- ADMINS group has ROLE_ADMIN
 (4, 4), -- FINANCE group has ROLE_FINANCE
-(5, 5)  -- RADIOLOGISTS group has ROLE_RADIOLOGIST
+(5, 5), -- RADIOLOGISTS group has ROLE_RADIOLOGIST
+(6, 6), -- STAFFS group has ROLE_STAFF
+(7, 7)  -- TECHNICIANS group has ROLE_TECHNICIAN
 ON CONFLICT DO NOTHING;
 
 -- =====================================================
--- INITIAL DATA - DEFAULT ADMIN USER
--- Purpose: Create system administrator account
--- Username: admin
--- Password: admin123 (BCrypt hash)
--- Security: Change this in production!
+-- Reset sequences to continue from correct values
 -- =====================================================
-INSERT INTO users (
-    id, 
-    username, 
-    email, 
-    password, 
-    enabled, 
-    account_non_expired, 
-    account_non_locked, 
-    credentials_non_expired,
-    failed_login_attempts,
-    deleted,
-    created_at, 
-    updated_at
-) VALUES (
-    1,
-    'admin',
-    'admin@healthcare.com',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', -- BCrypt hash of "admin123"
-    true,
-    true,
-    true,
-    true,
-    0,
-    false,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
-) ON CONFLICT (username) DO NOTHING;
-
--- Assign admin user to ADMINS group
-INSERT INTO user_user_groups (user_id, user_group_id) VALUES
-(1, 3) -- admin user in ADMINS group
-ON CONFLICT DO NOTHING;
-
--- =====================================================
--- RESET SEQUENCES
--- Purpose: Ensure auto-increment continues correctly
--- =====================================================
-SELECT setval('roles_id_seq', (SELECT COALESCE(MAX(id), 0) FROM roles) + 1);
-SELECT setval('user_groups_id_seq', (SELECT COALESCE(MAX(id), 0) FROM user_groups) + 1);
-SELECT setval('users_id_seq', (SELECT COALESCE(MAX(id), 0) FROM users) + 1);
-
+SELECT setval('roles_id_seq', (SELECT MAX(id) FROM roles));
+SELECT setval('user_groups_id_seq', (SELECT MAX(id) FROM user_groups));
 -- =====================================================
 -- VERIFICATION QUERIES
 -- Run these to verify setup
@@ -210,32 +189,3 @@ SELECT setval('users_id_seq', (SELECT COALESCE(MAX(id), 0) FROM users) + 1);
 -- HELPFUL VIEWS (Optional)
 -- =====================================================
 
--- View to see users with their groups and roles
-CREATE OR REPLACE VIEW v_user_permissions AS
-SELECT 
-    u.id as user_id,
-    u.username,
-    u.email,
-    u.enabled,
-    ug.name as group_name,
-    r.name as role_name,
-    r.description as role_description
-FROM users u
-LEFT JOIN user_user_groups uug ON u.id = uug.user_id
-LEFT JOIN user_groups ug ON uug.user_group_id = ug.id
-LEFT JOIN user_group_roles ugr ON ug.id = ugr.user_group_id
-LEFT JOIN roles r ON ugr.role_id = r.id
-WHERE u.deleted = false
-ORDER BY u.username, ug.name, r.name;
-
--- =====================================================
--- DATABASE NOTES
--- =====================================================
--- 1. All passwords are encrypted using BCrypt (strength 10)
--- 2. JWT tokens expire after 24 hours (configurable)
--- 3. Accounts lock after 5 failed login attempts
--- 4. Soft delete is used (deleted flag) to maintain audit trail
--- 5. Indexes are optimized for common query patterns
--- 6. Foreign keys ensure referential integrity
--- 7. Timestamps are in UTC
--- =====================================================
