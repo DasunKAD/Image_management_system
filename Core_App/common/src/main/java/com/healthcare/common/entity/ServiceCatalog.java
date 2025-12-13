@@ -1,4 +1,6 @@
 package com.healthcare.common.entity;
+import com.healthcare.common.enmus.ServiceCatalogCategory;
+import com.healthcare.common.enmus.TaskStatus;
 import lombok.*;
 import jakarta.persistence.*;
 import lombok.experimental.SuperBuilder;
@@ -19,4 +21,7 @@ public class ServiceCatalog extends BaseEntity {
 
     private String description; // e.g., "CT Scan Head"
     private BigDecimal unitCost;
+
+    @Enumerated(EnumType.STRING)
+    private ServiceCatalogCategory category;
 }

@@ -1,6 +1,7 @@
 package com.healthcare.core.util;
 
 import com.healthcare.common.dto.CreateUserRequest;
+import com.healthcare.common.enmus.ServiceCatalogCategory;
 import com.healthcare.common.entity.ServiceCatalog;
 import com.healthcare.common.service.ServiceCatalogService;
 import com.healthcare.core.repository.ServiceCatalogRepository;
@@ -26,42 +27,42 @@ public class DataInitializerCore {
         List<ServiceCatalog> services = new ArrayList<>();
 
         // 1. PROFESSIONAL SERVICES
-        services.add(create("SVC_CON_GEN", "General Doctor Consultation", 50.00));
-        services.add(create("SVC_CON_SPE", "Specialist Consultation (Senior)", 150.00));
-        services.add(create("SVC_CON_EMG", "Emergency Consultation", 120.00));
-        services.add(create("SVC_REP_RAD", "Radiologist Reporting Fee", 50.00));
-        services.add(create("SVC_CON_FOL", "Follow-up Visit (Short)", 30.00));
+        services.add(create("SVC_CON_GEN", "General Doctor Consultation", 50.00, ServiceCatalogCategory.PROFESSIONAL_SERVICE) );
+        services.add(create("SVC_CON_SPE", "Specialist Consultation (Senior)", 150.00, ServiceCatalogCategory.PROFESSIONAL_SERVICE));
+        services.add(create("SVC_CON_EMG", "Emergency Consultation", 120.00, ServiceCatalogCategory.PROFESSIONAL_SERVICE));
+        services.add(create("SVC_REP_RAD", "Radiologist Reporting Fee", 50.00, ServiceCatalogCategory.PROFESSIONAL_SERVICE));
+        services.add(create("SVC_CON_FOL", "Follow-up Visit (Short)", 30.00, ServiceCatalogCategory.PROFESSIONAL_SERVICE));
 
         // 2. IMAGING SERVICES (MRI)
-        services.add(create("SVC_MRI_HEAD", "MRI Scan - Head/Brain", 500.00));
-        services.add(create("SVC_MRI_SPINE", "MRI Scan - Spine", 550.00));
-        services.add(create("SVC_MRI_KNEE", "MRI Scan - Knee/Joint", 450.00));
-        services.add(create("SVC_MRI_BODY", "MRI Scan - Full Body", 800.00));
+        services.add(create("SVC_MRI_HEAD", "MRI Scan - Head/Brain", 500.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_MRI_SPINE", "MRI Scan - Spine", 550.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_MRI_KNEE", "MRI Scan - Knee/Joint", 450.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_MRI_BODY", "MRI Scan - Full Body", 800.00, ServiceCatalogCategory.IMAGING_SERVICES));
 
         // 3. IMAGING SERVICES (CT Scan)
-        services.add(create("SVC_CT_HEAD", "CT Scan - Head", 300.00));
-        services.add(create("SVC_CT_CHEST", "CT Scan - Chest/Lungs", 320.00));
-        services.add(create("SVC_CT_ABD", "CT Scan - Abdomen", 350.00));
-        services.add(create("SVC_CT_CONT", "CT Scan with Contrast", 400.00));
+        services.add(create("SVC_CT_HEAD", "CT Scan - Head", 300.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_CT_CHEST", "CT Scan - Chest/Lungs", 320.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_CT_ABD", "CT Scan - Abdomen", 350.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_CT_CONT", "CT Scan with Contrast", 400.00, ServiceCatalogCategory.IMAGING_SERVICES));
 
         // 4. IMAGING SERVICES (X-Ray & Ultrasound)
-        services.add(create("SVC_XR_CHEST", "X-Ray - Chest", 80.00));
-        services.add(create("SVC_XR_LIMB", "X-Ray - Limb (Arm/Leg)", 70.00));
-        services.add(create("SVC_US_GEN", "Ultrasound - General", 120.00));
-        services.add(create("SVC_US_PREG", "Ultrasound - Pregnancy/Baby", 150.00));
+        services.add(create("SVC_XR_CHEST", "X-Ray - Chest", 80.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_XR_LIMB", "X-Ray - Limb (Arm/Leg)", 70.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_US_GEN", "Ultrasound - General", 120.00, ServiceCatalogCategory.IMAGING_SERVICES));
+        services.add(create("SVC_US_PREG", "Ultrasound - Pregnancy/Baby", 150.00, ServiceCatalogCategory.IMAGING_SERVICES));
 
         // 5. DIAGNOSTIC & LAB SERVICES
-        services.add(create("SVC_DG_ECG", "Electrocardiogram (ECG)", 100.00));
-        services.add(create("SVC_LAB_BLD", "Full Blood Count (FBC)", 45.00));
-        services.add(create("SVC_LAB_LIP", "Lipid Profile / Cholesterol", 60.00));
-        services.add(create("SVC_LAB_URI", "Urinalysis", 25.00));
+        services.add(create("SVC_DG_ECG", "Electrocardiogram (ECG)", 100.00, ServiceCatalogCategory.DIAGNOSTIC_LAB_SERVICES));
+        services.add(create("SVC_LAB_BLD", "Full Blood Count (FBC)", 45.00, ServiceCatalogCategory.DIAGNOSTIC_LAB_SERVICES));
+        services.add(create("SVC_LAB_LIP", "Lipid Profile / Cholesterol", 60.00, ServiceCatalogCategory.DIAGNOSTIC_LAB_SERVICES));
+        services.add(create("SVC_LAB_URI", "Urinalysis", 25.00, ServiceCatalogCategory.DIAGNOSTIC_LAB_SERVICES));
 
         // 6. ADMINISTRATIVE & CHANNELING FEES
-        services.add(create("SVC_ADM_REG", "New Patient Registration", 15.00));
-        services.add(create("SVC_ADM_PRT", "Medical Records Printout", 10.00));
-        services.add(create("SVC_ADM_REF", "External Referral Processing", 20.00));
-        services.add(create("SVC_CHAN_FEE", "Channeling Center Fee (Hospital Charge)", 15.00));
-        services.add(create("SVC_BOOK_FEE", "Online Booking Surcharge", 5.00));
+        services.add(create("SVC_ADM_REG", "New Patient Registration", 15.00, ServiceCatalogCategory.ADMINISTRATIVE_CHANNELING_SERVICE));
+        services.add(create("SVC_ADM_PRT", "Medical Records Printout", 10.00, ServiceCatalogCategory.ADMINISTRATIVE_CHANNELING_SERVICE));
+        services.add(create("SVC_ADM_REF", "External Referral Processing", 20.00, ServiceCatalogCategory.ADMINISTRATIVE_CHANNELING_SERVICE));
+        services.add(create("SVC_CHAN_FEE", "Channeling Center Fee (Hospital Charge)", 15.00, ServiceCatalogCategory.ADMINISTRATIVE_CHANNELING_SERVICE));
+        services.add(create("SVC_BOOK_FEE", "Online Booking Surcharge", 5.00, ServiceCatalogCategory.ADMINISTRATIVE_CHANNELING_SERVICE));
 
         services.forEach(data -> {
             try {
@@ -75,12 +76,13 @@ public class DataInitializerCore {
     }
 
     // Helper method to keep code clean
-    private static ServiceCatalog create(String code, String desc, double cost) {
+    private static ServiceCatalog create(String code, String desc, double cost, ServiceCatalogCategory category) {
         ServiceCatalog svc = new ServiceCatalog();
         svc.setServiceCode(code);
         svc.setDescription(desc);
         svc.setDeleted(false);
         svc.setUnitCost(BigDecimal.valueOf(cost));
+        svc.setCategory(category);
         return svc;
     }
 }

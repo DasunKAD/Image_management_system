@@ -2,7 +2,7 @@ package com.healthcare.common.enmus;
 
 public enum TaskStatus {
     PENDING,
-    IN_PROGRESS,
+    PENDING_REVIEW,
     COMPLETED,
     CANCELLED
 }

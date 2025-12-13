@@ -2,15 +2,13 @@ package com.healthcare.core.service;
 
 import com.healthcare.common.dto.AppointmentCreateRequestDTO;
 import com.healthcare.common.dto.AppointmentServiceDTO;
-import com.healthcare.common.dto.ServiceCatalogDTO;
 import com.healthcare.common.enmus.PaymentStatus;
+import com.healthcare.common.enmus.ServiceCatalogCategory;
 import com.healthcare.common.enmus.TaskStatus;
 import com.healthcare.common.entity.*;
 import com.healthcare.common.service.AppointmentService;
-import com.healthcare.common.service.ServiceCatalogService;
 import com.healthcare.core.exception.ResourceNotFoundException;
 import com.healthcare.core.repository.*;
-import com.healthcare.core.util.UniqueCodeGenerator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -76,12 +73,15 @@ public class AppointmentServiceImpl implements AppointmentService {
             for (AppointmentServiceDTO serviceDTO : requestDTO.getServices()) {
                 // Fetch service catalog
                 ServiceCatalog serviceCatalog = validateAndFetchServiceCatalog(serviceDTO.getServiceId());
-
+                MedicalImage savedImage = null;
                 // Create MedicalImage entry first (just a placeholder entry)
-                MedicalImage medicalImage = createMedicalImageEntry(patient, doctor);
-                MedicalImage savedImage = medicalImageRepository.save(medicalImage);
-                medicalImages.add(savedImage);
-                log.info("MedicalImage entry created with ID: {}", savedImage.getId());
+                if (serviceCatalog.getCategory().equals(ServiceCatalogCategory.IMAGING_SERVICES)) {
+                    MedicalImage medicalImage = createMedicalImageEntry(patient, doctor, serviceCatalog);
+                    savedImage = medicalImageRepository.save(medicalImage);
+                    medicalImages.add(savedImage);
+                    log.info("MedicalImage entry created with ID: {}", savedImage.getId());
+                }
+
 
                 // Create WorkflowTask and link it to the medical image
                 WorkflowTask task = createWorkflowTask(savedVisit, serviceDTO, serviceCatalog, doctor, savedImage);
@@ -170,10 +170,10 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .build();
     }
 
-    private MedicalImage createMedicalImageEntry(Patient patient, Staff uploadedBy) {
+    private MedicalImage createMedicalImageEntry(Patient patient, Staff uploadedBy, ServiceCatalog serviceCatalog) {
         return MedicalImage.builder()
                 .patient(patient)
-                .modality("PENDING") // Will be updated when actual scan is done
+                .modality(extractModalityFromTask(serviceCatalog.getDescription())) // Will be updated when actual scan is done
                 .deleted(false)
                 .build();
     }
@@ -197,6 +197,19 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .status(PaymentStatus.OPEN)
                 .billItems(new ArrayList<>())
                 .build();
+    }
+
+    private String extractModalityFromTask(String description) {
+        if (description == null) return "GENERAL";
+
+        String upperDesc = description.toUpperCase();
+        if (upperDesc.contains("MRI")) return "MRI";
+        if (upperDesc.contains("CT") || upperDesc.contains("COMPUTED TOMOGRAPHY")) return "CT";
+        if (upperDesc.contains("XRAY") || upperDesc.contains("X-RAY")) return "XRAY";
+        if (upperDesc.contains("ULTRASOUND") || upperDesc.contains("SONOGRAPHY")) return "ULTRASOUND";
+        if (upperDesc.contains("MAMMOGRAPHY")) return "MAMMOGRAPHY";
+
+        return "GENERAL";
     }
 
     private String generateVisitNumber() {

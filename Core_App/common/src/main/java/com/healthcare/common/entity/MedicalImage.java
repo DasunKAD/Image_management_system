@@ -4,6 +4,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "medical_image")
@@ -22,9 +25,23 @@ public class MedicalImage extends BaseEntity {
     @JoinColumn(name = "uploaded_by_staff_id")
     private Staff uploadedBy;
 
-    private String fileUrl; // "s3://bucket/scan.dcm"
+    // Store multiple file URLs
+    @ElementCollection
+    @CollectionTable(
+            name = "medical_image_files",
+            joinColumns = @JoinColumn(name = "medical_image_id")
+    )
+    @Column(name = "file_url")
+    @Builder.Default
+    private List<String> fileUrls = new ArrayList<>();
 
     private String modality; // "MRI", "CT", "XRAY"
 
     private LocalDateTime uploadDate;
+
+    public void addFileUrl(String fileUrl) {
+        if (fileUrl != null && !fileUrl.trim().isEmpty()) {
+            this.fileUrls.add(fileUrl);
+        }
+    }
 }
