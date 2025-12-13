@@ -12,7 +12,7 @@ const Login = () => {
 
   const demoAccounts = [
     { email: 'admin@hospital.com', password: 'admin123', role: 'Admin' },
-    { email: 'doctor@hospital.com', password: 'doctor123', role: 'Doctor' },
+    { email: 'technician@hospital.com', password: 'technician123', role: 'Technician' },
     { email: 'radiologist@hospital.com', password: 'radio123', role: 'Radiologist' },
     { email: 'finance@hospital.com', password: 'finance123', role: 'Finance' },
     // { email: 'management@hospital.com', password: 'manage123', role: 'Management' },

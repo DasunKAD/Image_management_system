@@ -12,7 +12,9 @@ import {
   LogOut, 
   Menu, 
   X,
-  Activity
+  Activity,
+  ClipboardList,
+  ListChecks
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
@@ -34,6 +36,18 @@ const Layout = ({ children }) => {
       roles: [] 
     },
     { 
+      path: '/worklist', 
+      icon: ClipboardList, 
+      label: 'Worklist (Pending)', 
+      roles: ['ROLE_TECHNICIAN', 'ROLE_ADMIN'] 
+    },
+    { 
+      path: '/radiologist-tasks', 
+      icon: ListChecks, 
+      label: 'Pending Tasks List', 
+      roles: ['ROLE_RADIOLOGIST', 'ROLE_ADMIN'] 
+    },
+    { 
       path: '/patients', 
       icon: Users, 
       label: 'Patients', 
@@ -51,11 +65,17 @@ const Layout = ({ children }) => {
       label: 'Appointments', 
       roles: ['ROLE_ADMIN', 'ROLE_STAFF', 'ROLE_DOCTOR']
     },
+    // { 
+    //   path: '/images', 
+    //   icon: Image, 
+    //   label: 'Medical Images', 
+    //   roles: ['ROLE_RADIOLOGIST', 'ROLE_DOCTOR']
+    // },
     { 
-      path: '/images', 
-      icon: Image, 
-      label: 'Medical Images', 
-      roles: ['ROLE_RADIOLOGIST', 'ROLE_DOCTOR']
+      path: '/worklist', // Assuming you use the worklist created in the previous step
+      icon: ClipboardList, 
+      label: 'Radiology Worklist', 
+      roles: ['ROLE_TECHNICIAN', 'ROLE_RADIOLOGIST', 'ROLE_ADMIN'] 
     },
     { 
       path: '/diagnosis', 

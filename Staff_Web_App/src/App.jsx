@@ -11,6 +11,9 @@ import ImageUpload from './pages/ImageUpload';
 import DiagnosisReports from './pages/DiagnosisReports';
 import BillingInvoice from './pages/BillingInvoice';
 import ProtectedRoute from './components/ProtectedRoute';
+import TechnicianWorklist from './pages/TechnicianWorklist';
+import PendingTasksList from './pages/PendingTasksList';
+import TaskReview from './pages/TaskReview';
 import './App.css';
 
 function App() {
@@ -28,6 +31,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* ... other existing routes ... */}
             <Route
               path="/patients"
               element={
@@ -52,6 +56,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* Existing Images Route */}
             <Route
               path="/images"
               element={
@@ -60,6 +65,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* NEW ROUTE FOR RADIOLOGIST PENDING TASKS */}
+            <Route
+              path="/radiologist-tasks"
+              element={
+                <ProtectedRoute roles={['ROLE_RADIOLOGIST', 'ROLE_ADMIN']}>
+                   <PendingTasksList />
+                </ProtectedRoute>
+              }
+            />
+            
             <Route
               path="/diagnosis"
               element={
@@ -73,6 +88,22 @@ function App() {
               element={
                 <ProtectedRoute roles={['ROLE_FINANCE', 'ROLE_ADMIN']}>
                   <BillingInvoice />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/worklist"
+              element={
+                <ProtectedRoute roles={['ROLE_TECHNICIAN', 'ROLE_ADMIN']}>
+                  <TechnicianWorklist />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/review/:taskId"
+              element={
+                <ProtectedRoute roles={['ROLE_RADIOLOGIST', 'ROLE_ADMIN', 'ROLE_DOCTOR']}>
+                  <TaskReview />
                 </ProtectedRoute>
               }
             />

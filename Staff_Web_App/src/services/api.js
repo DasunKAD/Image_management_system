@@ -142,6 +142,176 @@ const MOCK_DATA = {
       dueDate: '2024-12-25',
     },
   ],
+  workflowTasks: [
+    {
+      taskId: 101,
+      taskNo: 'T-2024-001',
+      taskType: 'IMAGING_REQUEST',
+      status: 'PENDING',
+      description: 'Perform Brain MRI with contrast',
+      createdOn: '2024-12-11T09:00:00',
+      completedOn: null,
+      imageId: null,
+      fileUrl: null,
+      modality: 'MRI',
+      uploadDate: null,
+      imageUploadedByStaffId: null,
+      imageUploadedByStaffName: null,
+      patientId: 1001,
+      patientName: 'John Doe',
+      patientEmail: 'john@example.com',
+      patientPhone: '+1234567890',
+      patientAddress: '123 Main St',
+      patientDateOfBirth: '1985-06-15',
+      patientGender: 'Male',
+      patientMedicalRecordNumber: 'MRN-001',
+      assignedStaffId: 201,
+      assignedStaffName: 'Tech. Sarah',
+      assignedStaffEmail: 'sarah@hospital.com',
+      assignedStaffRole: 'ROLE_TECHNICIAN',
+      assignedStaffDepartment: 'Radiology',
+      visitId: 501,
+      visitNo: 'V-2024-888',
+      visitReason: 'Severe Headaches',
+      checkInTime: '2024-12-11T08:30:00',
+      checkOutTime: null,
+      visitDoctorId: 305,
+      visitDoctorName: 'Dr. Michael Chen',
+      visitDoctorEmail: 'chen@hospital.com',
+      attachmentCount: 0,
+      hasImage: false,
+      isVisitActive: true
+    },
+    {
+      taskId: 102,
+      taskNo: 'T-2024-002',
+      taskType: 'LAB_request',
+      status: 'PENDING',
+      description: 'Chest X-Ray PA View',
+      createdOn: '2024-12-11T10:15:00',
+      completedOn: null,
+      imageId: null,
+      fileUrl: null,
+      modality: 'XRAY',
+      uploadDate: null,
+      imageUploadedByStaffId: null,
+      imageUploadedByStaffName: null,
+      patientId: 1002,
+      patientName: 'Jane Smith',
+      patientEmail: 'jane@example.com',
+      patientPhone: '+987654321',
+      patientAddress: '456 Oak Ave',
+      patientDateOfBirth: '1992-03-22',
+      patientGender: 'Female',
+      patientMedicalRecordNumber: 'MRN-005',
+      assignedStaffId: 201,
+      assignedStaffName: 'Tech. Sarah',
+      assignedStaffEmail: 'sarah@hospital.com',
+      assignedStaffRole: 'ROLE_TECHNICIAN',
+      assignedStaffDepartment: 'Radiology',
+      visitId: 502,
+      visitNo: 'V-2024-999',
+      visitReason: 'Chest Pain',
+      checkInTime: '2024-12-11T10:00:00',
+      checkOutTime: null,
+      visitDoctorId: 305,
+      visitDoctorName: 'Dr. Michael Chen',
+      visitDoctorEmail: 'chen@hospital.com',
+      attachmentCount: 1,
+      hasImage: false,
+      isVisitActive: true
+    },
+    {
+      taskId: 103,
+      taskNo: 'T-2024-003',
+      taskType: 'IMAGING_REVIEW',
+      status: 'PENDING_REVIEW', // Status indicating it's ready for Radiologist
+      description: 'Review Chest CT Scan for nodules',
+      createdOn: '2024-12-10T14:30:00',
+      scanDate: '2024-12-12T11:00:00', // Added scanDate
+      completedOn: null,
+      modality: 'CT',
+      attachmentCount: 125, // Image count
+      patientId: 1001,
+      patientName: 'John Doe',
+      patientMedicalRecordNumber: 'MRN-001',
+      visitId: 501,
+      visitNo: 'V-2024-888',
+      visitReason: 'Follow up',
+      visitDoctorName: 'Dr. Michael Chen',
+    },
+    {
+      taskId: 104,
+      taskNo: 'T-2024-004',
+      taskType: 'IMAGING_REVIEW',
+      status: 'PENDING_REVIEW',
+      description: 'Right Knee MRI interpretation',
+      createdOn: '2024-12-11T09:00:00',
+      scanDate: '2024-12-12T14:15:00',
+      completedOn: null,
+      modality: 'MRI',
+      attachmentCount: 45,
+      patientId: 1002,
+      patientName: 'Jane Smith',
+      patientMedicalRecordNumber: 'MRN-005',
+      visitId: 502,
+      visitNo: 'V-2024-999',
+      visitReason: 'Knee Pain',
+      visitDoctorName: 'Dr. Sarah Johnson',
+    }
+  ],
+};
+
+const MOCK_TASK_DETAILS = {
+  taskId: 101,
+  taskNo: 'T-2024-001',
+  status: 'IN_PROGRESS', 
+  priority: 'High',
+  createdOn: '2024-12-11T09:00:00',
+  description: 'Perform Brain MRI with contrast. Patient reports chronic headaches.',
+  modality: 'MRI',
+  
+  // Flattened Patient Details
+  patientId: 'P001',
+  patientName: 'John Doe',
+  patientDateOfBirth: '1985-06-15',
+  patientGender: 'Male',
+  patientMedicalRecordNumber: 'MRN-001',
+  patientEmail: 'john@example.com',
+  patientPhone: '+1 234-567-8900',
+  patientMedicalHistory: 'Hypertension, Type 2 Diabetes', 
+  
+  // Flattened Visit Details
+  visitId: 'V-2024-888',
+  visitReason: 'Severe Headaches',
+  visitDoctorName: 'Dr. Michael Chen',
+
+  // UPDATED IMAGES WITH BASE64
+  images: [
+    { 
+      id: 1, 
+      // Simple Gray Square Base64
+      url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAADklEQVQIW2NkQAOMpAsAAgwAAutXYW4AAAAASUVORK5CYII=', 
+      name: 'BRAIN_AXIAL_001.dcm' 
+    },
+    { 
+      id: 2, 
+      // Simple Gray Square Base64
+      url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAADklEQVQIW2NkQAOMpAsAAgwAAutXYW4AAAAASUVORK5CYII=', 
+      name: 'BRAIN_AXIAL_002.dcm' 
+    },
+    { 
+      id: 3, 
+      // Simple Gray Square Base64
+      url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAADklEQVQIW2NkQAOMpAsAAgwAAutXYW4AAAAASUVORK5CYII=', 
+      name: 'BRAIN_SAGITTAL_001.dcm' 
+    }
+  ],
+
+  visitHistory: [
+    { date: '2024-12-11', type: 'Specialist', reason: 'Severe Headaches', doctor: 'Dr. Chen' },
+    { date: '2024-08-15', type: 'General', reason: 'Annual Checkup', doctor: 'Dr. Sarah' },
+  ]
 };
 
 // API Base URL (configure for production)
@@ -593,6 +763,89 @@ const apiService = {
       }
     },
   },
+
+  // NEW WORKFLOW SERVICE
+  workflow: {
+    getPendingTasks: async (status = 'PENDING') => {
+      try {
+        const response = await api.get('/workflow-task', {
+          params: { status }
+        });
+        return response.data;
+      } catch (error) {
+        console.warn('API unavailable, using mock workflow data');
+        // Return only PENDING tasks
+        return await mockApiCall(MOCK_DATA.workflowTasks.filter(t => t.status === 'PENDING'));
+      }
+    },
+
+    getRadiologistWorklist: async (status = 'PENDING_REVIEW') => {
+      try {
+        const response = await api.get('/workflow-task', {
+          params: { status }
+        });
+        return response.data;
+      } catch (error) {
+        console.warn('API unavailable, using mock radiologist worklist');
+        return await mockApiCall(
+          MOCK_DATA.workflowTasks.filter(t => t.status === status)
+        );
+      }
+    },
+
+    completeTask: async (taskId, formData) => {
+      try {
+        // formData contains files and potentially other fields
+        const response = await api.post(`/workflow-task/${taskId}/complete`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        return response.data;
+      } catch (error) {
+        console.warn('API unavailable, simulating task completion');
+        const index = MOCK_DATA.workflowTasks.findIndex(t => t.taskId === taskId);
+        if (index !== -1) {
+          MOCK_DATA.workflowTasks[index].status = 'COMPLETED';
+          MOCK_DATA.workflowTasks[index].completedOn = new Date().toISOString();
+          MOCK_DATA.workflowTasks[index].hasImage = true;
+        }
+        return await mockApiCall({ success: true, message: 'Task completed successfully' });
+      }
+    },
+    getTaskDetails: async (taskId) => {
+      try {
+        const response = await api.get(`/workflow-task/${taskId}`);
+        return response.data;
+      } catch (error) {
+        console.warn('API unavailable, using mock task details');
+        // Return mock data, but inject the requested taskId
+        
+         const response = await mockApiCall({ ...MOCK_TASK_DETAILS, taskId: taskId });
+         return  response.data
+      }
+    },
+
+    createTask: async (taskData) => {
+      try {
+        const response = await api.post('/workflow-task', taskData);
+        return response.data;
+      } catch (error) {
+        console.warn('API unavailable, simulating task creation');
+        return await mockApiCall({ success: true, taskId: Math.floor(Math.random() * 1000) });
+      }
+    },
+  },
+  diagnostics: {
+    submitReport: async (reportData) => {
+      try {
+        // reportData should include { taskId, classification, findings, ... }
+        const response = await api.post('/workflow-task/submit/diagnostic-report', reportData);
+        return response.data;
+      } catch (error) {
+        console.warn('API unavailable, simulating report submission');
+        return await mockApiCall({ success: true, reportId: 'RPT-' + Date.now() });
+      }
+    }
+  }
 };
 
 export default apiService;
