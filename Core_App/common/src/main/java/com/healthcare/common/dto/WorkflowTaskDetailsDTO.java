@@ -46,4 +46,6 @@ public class WorkflowTaskDetailsDTO {
 
     // Visit History
     private List<VisitHistoryDTO> visitHistory;
+    private DiagnosticReportDTO diagnosticReport;
+
 }

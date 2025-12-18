@@ -4,6 +4,8 @@ import com.healthcare.common.dto.CreateUserRequest;
 import com.healthcare.common.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -30,6 +32,17 @@ public class SsoClient {
                 .body(Mono.just(request), CreateUserRequest.class)
                 .retrieve()
                 .bodyToMono(UserResponse.class)
+                .block();
+    }
+
+    public ResponseEntity<String> validateToken(String jwt) {
+
+        return ssoWebClient
+                .get()
+                .uri("/auth/validate") // or "" if baseUrl already contains full path
+                .headers(headers -> headers.setBearerAuth(jwt))
+                .retrieve()
+                .toEntity(String.class)
                 .block();
     }
 }

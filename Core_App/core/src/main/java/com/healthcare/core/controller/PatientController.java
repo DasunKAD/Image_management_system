@@ -1,14 +1,18 @@
 package com.healthcare.core.controller;
 
 import com.healthcare.common.dto.ApiResponse;
+import com.healthcare.common.dto.PatientDTO;
 import com.healthcare.common.dto.PatientRegistrationRequest;
 import com.healthcare.common.entity.Patient;
+import com.healthcare.core.security.CustomUserDetails;
 import com.healthcare.core.service.PatientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +34,12 @@ public class PatientController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RADIOLOGIST')")
     public ResponseEntity<List<Patient>> getAllPatients() {
         return ResponseEntity.ok(patientService.getAllPatients());
+    }
+
+    @GetMapping("/profile")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR', 'RADIOLOGIST', 'PATIENT')")
+    public ResponseEntity<PatientDTO> getProfileOfCurrentPatient(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(patientService.getPatientWithFullDetails(userDetails.getUserId()));
     }
 
     @GetMapping("/search")

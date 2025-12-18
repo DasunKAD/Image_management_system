@@ -9,11 +9,13 @@ import com.healthcare.sso.repository.UserGroupRepository;
 import com.healthcare.sso.repository.UserRepository;
 import com.healthcare.sso.security.CustomUserDetails;
 import com.healthcare.sso.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +37,19 @@ public class AuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest request) {
+
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
         );
 
+        // ✅ Set authentication into SecurityContext
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         String token = jwtUtil.generateToken(userDetails, userDetails.getEmail());
 
         Set<String> roles = userDetails.getAuthorities().stream()
@@ -54,16 +64,17 @@ public class AuthService {
                 .build();
     }
 
+
     @Transactional(readOnly = true)
-    public TokenValidationResponse validateToken(TokenValidationRequest request) {
+    public TokenValidationResponse validateToken(String token) {
         try {
-            if (!jwtUtil.validateToken(request.getToken())) {
+            if (!jwtUtil.validateToken(token)) {
                 return TokenValidationResponse.builder()
                         .valid(false)
                         .build();
             }
 
-            String username = jwtUtil.extractUsername(request.getToken());
+            String username = jwtUtil.extractUsername(token);
             User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -75,6 +86,8 @@ public class AuthService {
             return TokenValidationResponse.builder()
                     .valid(true)
                     .username(user.getUsername())
+                    .userId(user.getId())
+                    .message("Token is valid")
                     .email(user.getEmail())
                     .roles(roles)
                     .build();

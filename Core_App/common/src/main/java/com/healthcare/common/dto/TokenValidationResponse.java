@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -15,6 +16,8 @@ public class TokenValidationResponse {
 
     private Boolean valid;
     private String username;
+    private String message;
+    private Long userId;
     private String email;
     private Set<String> roles;
 }
