@@ -14,6 +14,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import TechnicianWorklist from './pages/TechnicianWorklist';
 import PendingTasksList from './pages/PendingTasksList';
 import TaskReview from './pages/TaskReview';
+import FinanceDashboard from './pages/FinanceDashboard';
+import PatientPortal from './pages/PatientPortal';
 import './App.css';
 
 function App() {
@@ -107,6 +109,22 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+                path="/finance"
+                element={
+                  <ProtectedRoute roles={['ROLE_FINANCE', 'ROLE_ADMIN']}>
+                    <FinanceDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-portal"
+                element={
+                  <ProtectedRoute roles={['ROLE_PATIENT', 'ROLE_ADMIN']}>
+                    <PatientPortal />
+                  </ProtectedRoute>
+                }
+              />
             <Route path="/" element={<Navigate to="/login" replace />} />
           </Routes>
         </Router>

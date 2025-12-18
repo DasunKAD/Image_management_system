@@ -83,11 +83,23 @@ const Layout = ({ children }) => {
       label: 'Diagnosis', 
       roles: ['ROLE_DOCTOR'] 
     },
+    // { 
+    //   path: '/billing', 
+    //   icon: DollarSign, 
+    //   label: 'Billing', 
+    //   roles: ['ROLE_FINANCE', 'ROLE_ADMIN'] 
+    // },
     { 
-      path: '/billing', 
+      path: '/finance', 
       icon: DollarSign, 
-      label: 'Billing', 
+      label: 'Invoices', 
       roles: ['ROLE_FINANCE', 'ROLE_ADMIN'] 
+    },
+    { 
+      path: '/my-portal', 
+      icon: Users, // Or any icon like Heart, User, etc.
+      label: 'My Health Portal', 
+      roles: ['ROLE_PATIENT'] 
     },
   ];
 

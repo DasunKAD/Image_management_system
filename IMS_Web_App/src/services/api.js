@@ -375,6 +375,17 @@ const apiService = {
         return await mockApiCall(MOCK_DATA.patients);
       }
     },
+
+    getCurrentPatient: async () => {
+      try {
+        // Try real API first
+        const response = await api.get('/patients/profile');
+        return response;
+      } catch (error) {
+        console.warn('API unavailable, using mock data:', error.message);
+        return await mockApiCall(MOCK_DATA.patients);
+      }
+    },
     
     getById: async (id) => {
       try {
@@ -722,7 +733,7 @@ const apiService = {
     
     updateStatus: async (id, status) => {
       try {
-        const response = await api.patch(`/invoices/${id}/status`, { status });
+        const response = await api.post(`/invoices/${id}/status`, { status });
         return response.data;
       } catch (error) {
         console.warn('API unavailable, simulating status update');

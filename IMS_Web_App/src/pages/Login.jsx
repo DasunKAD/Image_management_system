@@ -15,6 +15,7 @@ const Login = () => {
     { email: 'technician@hospital.com', password: 'technician123', role: 'Technician' },
     { email: 'radiologist@hospital.com', password: 'radio123', role: 'Radiologist' },
     { email: 'finance@hospital.com', password: 'finance123', role: 'Finance' },
+    { email: 'patient@gmail.com', password: 'patient123', role: 'Patient' },
     // { email: 'management@hospital.com', password: 'manage123', role: 'Management' },
   ];
 
