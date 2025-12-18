@@ -33,19 +33,19 @@ const Layout = ({ children }) => {
       path: '/dashboard', 
       icon: LayoutDashboard, 
       label: 'Dashboard', 
-      roles: [] 
+      roles: ['ROLE_ADMIN', 'ROLE_STAFF']
     },
     { 
       path: '/worklist', 
       icon: ClipboardList, 
       label: 'Worklist (Pending)', 
-      roles: ['ROLE_TECHNICIAN', 'ROLE_ADMIN'] 
+      roles: ['ROLE_TECHNICIAN',] 
     },
     { 
       path: '/radiologist-tasks', 
       icon: ListChecks, 
       label: 'Pending Tasks List', 
-      roles: ['ROLE_RADIOLOGIST', 'ROLE_ADMIN'] 
+      roles: ['ROLE_RADIOLOGIST',] 
     },
     { 
       path: '/patients', 
@@ -71,12 +71,12 @@ const Layout = ({ children }) => {
     //   label: 'Medical Images', 
     //   roles: ['ROLE_RADIOLOGIST', 'ROLE_DOCTOR']
     // },
-    { 
-      path: '/worklist', // Assuming you use the worklist created in the previous step
-      icon: ClipboardList, 
-      label: 'Radiology Worklist', 
-      roles: ['ROLE_TECHNICIAN', 'ROLE_RADIOLOGIST', 'ROLE_ADMIN'] 
-    },
+    // { 
+    //   path: '/worklist', // Assuming you use the worklist created in the previous step
+    //   icon: ClipboardList, 
+    //   label: 'Radiology Worklist', 
+    //   roles: ['ROLE_RADIOLOGIST'] 
+    // },
     { 
       path: '/diagnosis', 
       icon: FileText, 
@@ -93,7 +93,7 @@ const Layout = ({ children }) => {
       path: '/finance', 
       icon: DollarSign, 
       label: 'Invoices', 
-      roles: ['ROLE_FINANCE', 'ROLE_ADMIN'] 
+      roles: ['ROLE_FINANCE'] 
     },
     { 
       path: '/my-portal', 

@@ -11,11 +11,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   const demoAccounts = [
-    { email: 'admin@hospital.com', password: 'admin123', role: 'Admin' },
-    { email: 'technician@hospital.com', password: 'technician123', role: 'Technician' },
-    { email: 'radiologist@hospital.com', password: 'radio123', role: 'Radiologist' },
-    { email: 'finance@hospital.com', password: 'finance123', role: 'Finance' },
-    { email: 'patient@gmail.com', password: 'patient123', role: 'Patient' },
+    { email: 'admin@hospital.com', password: 'admin123', role: 'Admin' , displayName:'Receptionist/Admin'},
+    { email: 'technician@hospital.com', password: 'technician123', role: 'Technician' ,displayName:'Technician'},
+    { email: 'radiologist@hospital.com', password: 'radio123', role: 'Radiologist',displayName:'Radiologist' },
+    { email: 'finance@hospital.com', password: 'finance123', role: 'Finance',displayName:'Finance' },
+    { email: 'patient@gmail.com', password: 'patient123', role: 'Patient',displayName:'Patient' },
     // { email: 'management@hospital.com', password: 'manage123', role: 'Management' },
   ];
 
@@ -258,7 +258,7 @@ const Login = () => {
                     marginBottom: '0.5rem',
                   }}>
                     <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>
-                      {account.role}
+                      {account.displayName}
                     </span>
                     <span className="badge badge-success">
                       Active

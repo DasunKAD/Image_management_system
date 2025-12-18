@@ -520,7 +520,7 @@ const apiService = {
     getAll: async () => {
       try {
         const response = await api.get('/appointments');
-        return response.data;
+        return response;
       } catch (error) {
         console.warn('API unavailable, using mock data');
         return await mockApiCall(MOCK_DATA.appointments);
@@ -694,7 +694,7 @@ const apiService = {
     getAll: async () => {
       try {
         const response = await api.get('/invoices');
-        return response.data;
+        return response;
       } catch (error) {
         console.warn('API unavailable, using mock data');
         return await mockApiCall(MOCK_DATA.invoices);
